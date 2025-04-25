@@ -34,6 +34,8 @@ public class User {
     private UserRole role;
     private LocalDate created_at;
 
+    // adicionar as authorities depois no processo de setup do Spring Security
+
     // não usei a annotation do lombok pra getters e setters pois
     // quero ter o controle de quais atributos vão ter getter e/ou setter
     public Long getId() {
