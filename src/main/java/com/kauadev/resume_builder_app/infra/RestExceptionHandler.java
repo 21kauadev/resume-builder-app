@@ -1,4 +1,4 @@
-package com.kauadev.resume_builder_app.infra.security;
+package com.kauadev.resume_builder_app.infra;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
