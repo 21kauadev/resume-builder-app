@@ -1,6 +1,12 @@
 package com.kauadev.resume_builder_app.domain.user;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,15 +15,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 @Table(name = "users")
-@Entity()
-@AllArgsConstructor
-@NoArgsConstructor
-public class User {
+@Entity
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +32,25 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
     private LocalDate created_at;
 
-    // adicionar as authorities depois no processo de setup do Spring Security
+    // construtor sem ter de passar o ID
+    public User(String username, String password, UserRole role, LocalDate created_at) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.created_at = created_at;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.role == UserRole.ADMIN) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        } else {
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+    }
 
     // não usei a annotation do lombok pra getters e setters pois
     // quero ter o controle de quais atributos vão ter getter e/ou setter
