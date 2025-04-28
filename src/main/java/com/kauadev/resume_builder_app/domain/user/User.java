@@ -25,9 +25,7 @@ public class User {
     private Long id;
     // melhor usar o tipo Long do que Integer para id.
     // evita overflow
-
-    private String name;
-    private String email;
+    private String username;
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -42,20 +40,12 @@ public class User {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setusername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

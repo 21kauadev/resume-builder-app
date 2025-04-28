@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-// classe pra exibir os erros como JSON
+// classe para padronizar os retornos dos controllers
 @Getter
 @Setter
 @AllArgsConstructor
-public class RestErrorMessage {
+public class ApiResponse<T> {
 
-    private String message;
     private Integer status;
+    private boolean success;
+    private String message;
+    private T data;
 
 }
