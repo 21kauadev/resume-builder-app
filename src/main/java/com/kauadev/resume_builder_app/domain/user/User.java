@@ -36,11 +36,12 @@ public class User implements UserDetails {
     private LocalDate created_at;
 
     // construtor sem ter de passar o ID
-    public User(String username, String password, UserRole role, LocalDate created_at) {
+    public User(String username, String password, UserRole role) {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.created_at = created_at;
+        // created_at é gerado automatico
+        // this.created_at = created_at;
     }
 
     @Override
