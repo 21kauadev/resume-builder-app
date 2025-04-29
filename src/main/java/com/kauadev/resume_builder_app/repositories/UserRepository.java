@@ -9,5 +9,4 @@ import com.kauadev.resume_builder_app.domain.user.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     UserDetails findByUsername(String username);
-
 }
