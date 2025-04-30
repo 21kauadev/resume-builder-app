@@ -1,9 +1,10 @@
 package com.kauadev.resume_builder_app.domain.user;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +34,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    private LocalDate created_at;
+    @CreationTimestamp
+    private LocalDateTime created_at;
 
     // construtor sem ter de passar o ID
     public User(String username, String password, UserRole role) {
@@ -75,12 +77,8 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public LocalDate getCreated_at() {
+    public LocalDateTime getCreated_at() {
         return created_at;
-    }
-
-    public void setCreated_at(LocalDate created_at) {
-        this.created_at = created_at;
     }
 
     public UserRole getRole() {
