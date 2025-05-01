@@ -46,6 +46,9 @@ public class User implements UserDetails {
         // this.created_at = created_at;
     }
 
+    public User() {
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {

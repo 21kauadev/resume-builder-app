@@ -52,7 +52,7 @@ public class AuthenticationController {
 
         Authentication authentication = authenticationManager.authenticate(usernamePassword);
 
-        String token = tokenService.generateToken((User) authentication);
+        String token = tokenService.generateToken((User) authentication.getPrincipal());
 
         ApiResponse<String> response = new ApiResponse<String>(HttpStatus.OK.value(), true,
                 "Usuário logado com sucesso", token);

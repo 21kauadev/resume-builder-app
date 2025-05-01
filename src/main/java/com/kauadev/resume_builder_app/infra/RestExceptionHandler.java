@@ -18,4 +18,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(restErrorMessage);
     }
 
+    @ExceptionHandler({ Exception.class })
+    private ResponseEntity<RestErrorMessage> generalExceptionHandler(Exception exception) {
+        RestErrorMessage restErrorMessage = new RestErrorMessage(exception.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(restErrorMessage);
+    }
+
 }
