@@ -3,12 +3,14 @@ package com.kauadev.resume_builder_app.infra.security;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import com.kauadev.resume_builder_app.repositories.UserRepository;
 
@@ -24,6 +26,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver resolver;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -44,7 +49,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            // TODO: handle exception
+            // resolve a exceção pra outro
+            resolver.resolveException(request, response, null, e);
         }
 
     }
