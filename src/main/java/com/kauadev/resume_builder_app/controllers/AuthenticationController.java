@@ -34,6 +34,13 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     private ResponseEntity<ApiResponse<User>> register(@RequestBody UserDTO userDTO) {
+        if (userRepository.findByUsername(userDTO.username()) != null) {
+            ApiResponse<User> response = new ApiResponse<User>(HttpStatus.BAD_REQUEST.value(), false,
+                    "Usuário já existe", null);
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
         String password_hash = passwordEncoder.encode(userDTO.password());
 
         User userToBeSaved = new User(userDTO.username(), password_hash, userDTO.role());
@@ -47,16 +54,26 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     private ResponseEntity<ApiResponse<String>> login(@RequestBody LoginDTO loginDTO) {
-        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
-                loginDTO.username(), loginDTO.password());
+        // se o usuário existir, segue pra lógica de login
+        if (userRepository.findByUsername(loginDTO.username()) != null) {
+            UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
+                    loginDTO.username(), loginDTO.password());
 
-        Authentication authentication = authenticationManager.authenticate(usernamePassword);
+            Authentication authentication = authenticationManager.authenticate(usernamePassword);
 
-        String token = tokenService.generateToken((User) authentication.getPrincipal());
+            String token = tokenService.generateToken((User) authentication.getPrincipal());
 
-        ApiResponse<String> response = new ApiResponse<String>(HttpStatus.OK.value(), true,
-                "Usuário logado com sucesso", token);
+            ApiResponse<String> response = new ApiResponse<String>(HttpStatus.OK.value(), true,
+                    "Usuário logado com sucesso", token);
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        // caso contrário só segue pra lógica de usuário inexistente.
+        // isso é possivel graças ao return, que interrompe o código todo abaixo se
+        // chamado.
+
+        ApiResponse<String> response = new ApiResponse<String>(HttpStatus.BAD_REQUEST.value(), false,
+                "Não há como logar em uma conta inexistente.", null);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
