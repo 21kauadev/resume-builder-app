@@ -35,10 +35,10 @@ public class AuthenticationController {
     @PostMapping("/register")
     private ResponseEntity<ApiResponse<User>> register(@RequestBody UserDTO userDTO) {
         if (userRepository.findByUsername(userDTO.username()) != null) {
-            ApiResponse<User> response = new ApiResponse<User>(HttpStatus.BAD_REQUEST.value(), false,
-                    "Usuário já existe", null);
+            ApiResponse<User> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), false,
+                    "Username já está em uso.", null);
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return ResponseEntity.badRequest().body(response);
         }
 
         String password_hash = passwordEncoder.encode(userDTO.password());

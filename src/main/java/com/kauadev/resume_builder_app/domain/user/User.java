@@ -68,7 +68,7 @@ public class User implements UserDetails {
         return username;
     }
 
-    public void setusername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
