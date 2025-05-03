@@ -35,6 +35,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String token = this.recoverToken(request);
+            System.out.println(token);
 
             if (token != null) {
                 String usernameSubject = tokenService.validateTokenAndReturnSubject(token);
@@ -49,21 +50,23 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            // resolve a exceção pra outro
+            // pede pra que o Spring trate a exceção e a retorne de forma adequada na
+            // response.
+            // permitindo que o controllerAdvice tambem alcance as exceções daqui.
             resolver.resolveException(request, response, null, e);
         }
 
     }
 
     protected String recoverToken(HttpServletRequest request) {
-        String authHeader = request.getHeader("AUTHORIZATION");
+        String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null) {
             return null;
         }
 
-        // onde tiver Bearer, troca por espaço vazio, restando só o token.
-        String token = authHeader.replace("Bearer", "");
+        // onde tiver "Bearer " , troca por espaço vazio, restando só o token.
+        String token = authHeader.replace("Bearer ", "");
 
         return token;
     }
