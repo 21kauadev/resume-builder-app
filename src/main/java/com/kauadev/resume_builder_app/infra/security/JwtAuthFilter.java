@@ -35,7 +35,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String token = this.recoverToken(request);
-            System.out.println(token);
 
             if (token != null) {
                 String usernameSubject = tokenService.validateTokenAndReturnSubject(token);
