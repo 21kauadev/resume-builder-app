@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.kauadev.resume_builder_app.domain.user.exceptions.CommonUserCanNotDeleteUsersException;
 import com.kauadev.resume_builder_app.domain.user.exceptions.UserNotFoundException;
 
 @ControllerAdvice
@@ -20,6 +21,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         RestErrorMessage restErrorMessage = new RestErrorMessage(exception.getMessage(), HttpStatus.NOT_FOUND.value());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(restErrorMessage);
+    }
+
+    @ExceptionHandler({ CommonUserCanNotDeleteUsersException.class })
+    private ResponseEntity<RestErrorMessage> commonUserCanNotDeleteOtherUsersHandler(
+            CommonUserCanNotDeleteUsersException exception) {
+        RestErrorMessage restErrorMessage = new RestErrorMessage(exception.getMessage(),
+                HttpStatus.METHOD_NOT_ALLOWED.value());
+
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(restErrorMessage);
     }
 
     @ExceptionHandler({ JWTCreationException.class })
