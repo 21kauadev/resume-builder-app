@@ -16,14 +16,14 @@ public class Resume {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String filePath;
+    private String file_path;
     private String position;
 
     @CreationTimestamp
     private LocalDateTime created_at;
 
-    public Resume(String filePath, String position) {
-        this.filePath = filePath;
+    public Resume(String file_path, String position) {
+        this.file_path = file_path;
         this.position = position;
     }
 
@@ -32,11 +32,11 @@ public class Resume {
     }
 
     public String getFilePath() {
-        return filePath;
+        return file_path;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setFilePath(String file_path) {
+        this.file_path = file_path;
     }
 
     public String getPosition() {
@@ -54,5 +54,4 @@ public class Resume {
     public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
     }
-
 }
