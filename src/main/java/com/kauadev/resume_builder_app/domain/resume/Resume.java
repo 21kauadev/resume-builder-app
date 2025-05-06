@@ -4,10 +4,13 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.kauadev.resume_builder_app.domain.user.User;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Resume {
@@ -21,6 +24,9 @@ public class Resume {
 
     @CreationTimestamp
     private LocalDateTime created_at;
+
+    @OneToOne
+    private User user;
 
     public Resume(String file_path, String position) {
         this.file_path = file_path;
