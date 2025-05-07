@@ -25,7 +25,7 @@ public class UserService {
 
     // evitando o uso de this se for desnecessário! melhora a legibilidade
 
-    private User getAuthenticationPrincipalUser() {
+    private User getLoggedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         User user = (User) authentication.getPrincipal();
@@ -61,7 +61,7 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        User loggedUser = getAuthenticationPrincipalUser();
+        User loggedUser = getLoggedUser();
         if (!loggedUser.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             throw new CommonUserCanNotDeleteUsersException();
         }

@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -26,11 +27,13 @@ public class Resume {
     private LocalDateTime created_at;
 
     @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Resume(String file_path, String position) {
+    public Resume(String file_path, String position, User user) {
         this.file_path = file_path;
         this.position = position;
+        this.user = user;
     }
 
     public Long getId() {
@@ -60,4 +63,13 @@ public class Resume {
     public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 }
