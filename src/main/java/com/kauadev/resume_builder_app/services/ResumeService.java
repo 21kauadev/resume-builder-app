@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.kauadev.resume_builder_app.domain.resume.Resume;
+import com.kauadev.resume_builder_app.domain.resume.ResumeDTO;
 import com.kauadev.resume_builder_app.domain.resume.exceptions.AdminCanNotHaveResumesException;
 import com.kauadev.resume_builder_app.domain.resume.exceptions.ResumeNotFoundException;
 import com.kauadev.resume_builder_app.domain.user.User;
@@ -63,4 +64,17 @@ public class ResumeService {
 
         return userResume;
     }
+
+    public Resume createResume(ResumeDTO data) {
+        Resume resume = new Resume(data.file_path(), data.position(), getLoggedUser());
+
+        return resumeRepository.save(resume);
+    }
+
+    public void deleteResume(Long id) {
+        Resume resume = resumeRepository.findById(id).orElseThrow(ResumeNotFoundException::new);
+
+        resumeRepository.delete(resume);
+    }
+
 }
