@@ -1,5 +1,6 @@
 package com.kauadev.resume_builder_app.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kauadev.resume_builder_app.domain.resume.Resume;
-import com.kauadev.resume_builder_app.domain.resume.ResumeDTO;
 import com.kauadev.resume_builder_app.infra.ApiResponse;
 import com.kauadev.resume_builder_app.services.ResumeService;
 
@@ -54,9 +56,11 @@ public class ResumeController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping()
-    private ResponseEntity<ApiResponse<Resume>> createResume(ResumeDTO data) {
-        Resume resume = resumeService.createResume(data);
+    @PostMapping("/upload")
+    private ResponseEntity<ApiResponse<Resume>> uploadResume(@RequestPart("file_path") MultipartFile file,
+            @RequestPart("position") String position)
+            throws IOException {
+        Resume resume = resumeService.uploadResume(file, position);
 
         ApiResponse<Resume> response = new ApiResponse<Resume>(HttpStatus.OK.value(), true,
                 "Currículo enviado com sucesso.",
@@ -66,7 +70,7 @@ public class ResumeController {
     }
 
     @DeleteMapping()
-    private ResponseEntity<ApiResponse<Void>> deleteResume(Long id) {
+    private ResponseEntity<ApiResponse<Void>> deleteResume(@PathVariable("id") Long id) {
         resumeService.deleteResume(id);
 
         ApiResponse<Void> response = new ApiResponse<Void>(HttpStatus.OK.value(), true, "Currículo apagado.", null);

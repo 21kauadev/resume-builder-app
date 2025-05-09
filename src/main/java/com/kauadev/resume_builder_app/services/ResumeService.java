@@ -1,15 +1,20 @@
 package com.kauadev.resume_builder_app.services;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kauadev.resume_builder_app.domain.resume.Resume;
-import com.kauadev.resume_builder_app.domain.resume.ResumeDTO;
 import com.kauadev.resume_builder_app.domain.resume.exceptions.AdminCanNotHaveResumesException;
 import com.kauadev.resume_builder_app.domain.resume.exceptions.ResumeNotFoundException;
 import com.kauadev.resume_builder_app.domain.user.User;
@@ -65,8 +70,21 @@ public class ResumeService {
         return userResume;
     }
 
-    public Resume createResume(ResumeDTO data) {
-        Resume resume = new Resume(data.file_path(), data.position(), getLoggedUser());
+    public Resume uploadResume(MultipartFile file, String position) throws IOException {
+
+        // salvando localmente
+
+        // gerando um nome aleatorio com base em um UUID e o nome orignial do arquivo
+        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+
+        // objeto path, representa o caminho no disco onde será salvo
+        Path path = Paths.get("uploads/" + filename);
+
+        // escreve o conteúdo binário do arquivo enviado no caminho especificado pelo
+        // path
+        Files.write(path, file.getBytes());
+
+        Resume resume = new Resume(path.toString(), position, getLoggedUser());
 
         return resumeRepository.save(resume);
     }
