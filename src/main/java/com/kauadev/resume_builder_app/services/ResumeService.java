@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kauadev.resume_builder_app.domain.resume.Resume;
 import com.kauadev.resume_builder_app.domain.resume.exceptions.AdminCanNotHaveResumesException;
+import com.kauadev.resume_builder_app.domain.resume.exceptions.CandidateCanNotSeeOthersResumes;
 import com.kauadev.resume_builder_app.domain.resume.exceptions.ResumeNotFoundException;
 import com.kauadev.resume_builder_app.domain.user.User;
 import com.kauadev.resume_builder_app.repositories.ResumeRepository;
@@ -35,6 +36,10 @@ public class ResumeService {
     }
 
     public List<Resume> getAllResumes() {
+        if (!getLoggedUser().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            throw new CandidateCanNotSeeOthersResumes();
+        }
+
         List<Resume> resumes = resumeRepository.findAll();
 
         return resumes;

@@ -1,5 +1,7 @@
 package com.kauadev.resume_builder_app.infra;
 
+import java.io.IOException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -30,6 +32,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.METHOD_NOT_ALLOWED.value());
 
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(restErrorMessage);
+    }
+
+    @ExceptionHandler({ IOException.class })
+    private ResponseEntity<RestErrorMessage> IOExceptionHandler(IOException exception) {
+        RestErrorMessage restErrorMessage = new RestErrorMessage(exception.getMessage(),
+                HttpStatus.BAD_REQUEST.value());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restErrorMessage);
     }
 
     @ExceptionHandler({ JWTCreationException.class })
