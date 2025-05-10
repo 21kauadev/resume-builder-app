@@ -77,20 +77,26 @@ public class ResumeService {
 
     public Resume uploadResume(MultipartFile file, String position) throws IOException {
 
-        // salvando localmente
+        // SALVANDO LOCALMENTE
 
         // gerando um nome aleatorio com base em um UUID e o nome orignial do arquivo
         String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
+        // se a pasta não existir, cria ela.
+        if (!Files.exists(Paths.get("uploads/"))) {
+            Files.createDirectory(Paths.get("uploads/"));
+        }
+
         // objeto path, representa o caminho no disco onde será salvo
         Path path = Paths.get("uploads/" + filename);
 
-        // escreve o conteúdo binário do arquivo enviado no caminho especificado pelo
-        // path
+        // escreve o conteúdo binário do arquivo enviado no caminho especificado
         Files.write(path, file.getBytes());
+        // até aqui já foi SALVO LOCALMENTE.
 
         Resume resume = new Resume(path.toString(), position, getLoggedUser());
 
+        // SALVANDO NO BANCO DE DADOS
         return resumeRepository.save(resume);
     }
 
