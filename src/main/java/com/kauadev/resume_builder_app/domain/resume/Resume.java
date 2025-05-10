@@ -30,6 +30,9 @@ public class Resume {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public Resume() {
+    }
+
     public Resume(String file_path, String position, User user) {
         this.file_path = file_path;
         this.position = position;

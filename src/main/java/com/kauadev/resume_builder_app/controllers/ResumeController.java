@@ -69,10 +69,11 @@ public class ResumeController {
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping()
-    private ResponseEntity<ApiResponse<Void>> deleteResume(@PathVariable("id") Long id) {
+    @DeleteMapping("/{id}")
+    private ResponseEntity<ApiResponse<Void>> deleteResume(@PathVariable("id") Long id) throws IOException {
         resumeService.deleteResume(id);
 
+        // apagar do diretorio de uploads também.
         ApiResponse<Void> response = new ApiResponse<Void>(HttpStatus.OK.value(), true, "Currículo apagado.", null);
 
         return ResponseEntity.ok().body(response);

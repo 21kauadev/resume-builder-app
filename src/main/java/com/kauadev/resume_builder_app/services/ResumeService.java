@@ -94,8 +94,13 @@ public class ResumeService {
         return resumeRepository.save(resume);
     }
 
-    public void deleteResume(Long id) {
+    public void deleteResume(Long id) throws IOException {
         Resume resume = resumeRepository.findById(id).orElseThrow(ResumeNotFoundException::new);
+
+        // pega o caminho e deleta se houver o arquivo lá também. assim, deleta o
+        // caminho não só da base de dados, como da pasta uploads também
+        Path path = Paths.get(resume.getFilePath());
+        Files.deleteIfExists(path);
 
         resumeRepository.delete(resume);
     }
